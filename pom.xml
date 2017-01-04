@@ -3,19 +3,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.mylogingebspock.project</groupId>
-    <artifactId>my-login-gebspock-project</artifactId>
+    <groupId>com.gebspockproject.template</groupId>
+    <artifactId>gebspock-project-template</artifactId>
     <version>1</version>
     <name>GebSpock Project Template</name>
     <properties>
         <gebVersion>0.12.2</gebVersion>
-        <seleniumVersion>2.48.2</seleniumVersion>
+        <seleniumVersion>3.0.1</seleniumVersion>
         <groovyVersion>2.3.6</groovyVersion>
         <mavenCompilerVersion>3.1</mavenCompilerVersion>
         <groovyEclipseBatchVersion>2.3.7-01</groovyEclipseBatchVersion>
         <groovyEclipseCompilerVersion>2.8.0-01</groovyEclipseCompilerVersion>
         <junitVersion>4.8.1</junitVersion>
         <spockCoreVersion>0.7-groovy-2.0</spockCoreVersion>
+        <htmlunitVersion>2.23</htmlunitVersion>
         <phantomjsdriverVersion>1.2.1</phantomjsdriverVersion>
         <safaridriverVersion>2.48.0</safaridriverVersion>
     </properties>
@@ -105,16 +106,22 @@
             <artifactId>geb-spock</artifactId>
             <version>${gebVersion}</version>
             <scope>test</scope>
-        </dependency>
+          </dependency>
+          <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>${seleniumVersion}</version>
+            <scope>test</scope>
+          </dependency>  
+          <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>htmlunit-driver</artifactId>
+            <version>${htmlunitVersion}</version>
+            <scope>test</scope>
+        </dependency> 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-firefox-driver</artifactId>
-            <version>${seleniumVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-htmlunit-driver</artifactId>
             <version>${seleniumVersion}</version>
             <scope>test</scope>
         </dependency>
