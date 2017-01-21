@@ -16,7 +16,7 @@
         <groovyEclipseCompilerVersion>2.9.2-01</groovyEclipseCompilerVersion>
         <junitVersion>4.12</junitVersion>
         <spockCoreVersion>1.0-groovy-2.4</spockCoreVersion>
-        <htmlunitVersion>2.52.0</htmlunitVersion>
+        <htmlunitVersion>2.23.1</htmlunitVersion>
         <phantomjsdriverVersion>1.2.1</phantomjsdriverVersion>
         <safaridriverVersion>2.48.0</safaridriverVersion>
     </properties>
@@ -115,7 +115,7 @@
           </dependency>  
           <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-htmlunit-driver</artifactId>
+            <artifactId>htmlunit-driver</artifactId>
             <version>${htmlunitVersion}</version>
             <scope>test</scope>
         </dependency> 
