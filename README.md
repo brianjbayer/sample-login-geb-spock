@@ -45,8 +45,6 @@ mvn clean test *command-line-arguments*
 ### Minimal Requirements
 * By default, tests will use the headless HtmlUnit browser
 
-NOTE: WIP: LAST TEST CURRENTLY FAILS IN HTMLUNIT
-
 To run with specific browser drivers, look in the GebConfig.groovy file for any
 configured environments and pass the value to your maven command using the
  'geb.env' command line argument.
@@ -54,6 +52,8 @@ configured environments and pass the value to your maven command using the
 
 **Example:**
 `mvn clean test -Dgeb.env=chrome
+
+NOTE: SAFARI 10 IS CURRENTLY BORKED
 
 
 ## Requirements
