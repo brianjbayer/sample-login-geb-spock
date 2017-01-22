@@ -51,7 +51,7 @@ configured environments and pass the value to your maven command using the
 
 
 **Example:**
-`mvn clean test -Dgeb.env=chrome
+`mvn clean test -Dgeb.env=chrome`
 
 NOTE: SAFARI 10 IS CURRENTLY BORKED
 
