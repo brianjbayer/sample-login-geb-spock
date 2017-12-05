@@ -20,6 +20,15 @@ mvn clean test *command-line-arguments*
 **Example:**
 `-Dgeb.env=chrome`
 
+Currently the following browsers are supported in this project:
+* `htmlunit` - the default
+* `chrome` - Google Chrome (requires Chrome and chromedriver)
+* `chromeHeadless` - Google Chrome run in headless mode (requires Chrome > 59 and chromedriver)
+* `firefox` - Mozilla Firefox (requires Firefox and geckodriver)
+* `phantomjs` - PhantomJS headless browser (requires PhantomJS)
+* `safari` - Apple Safari (requires Safari)
+
+
 #### Specify Target Environment
 -Dspock.run.target=...
 
@@ -52,8 +61,6 @@ configured environments and pass the value to your maven command using the
 
 **Example:**
 `mvn clean test -Dgeb.env=chrome`
-
-NOTE: SAFARI 10 IS CURRENTLY BORKED
 
 
 ## Requirements
