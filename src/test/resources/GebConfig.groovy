@@ -1,11 +1,10 @@
 import org.openqa.selenium.Dimension
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.safari.SafariDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -18,25 +17,25 @@ Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.SEVERE)
 Logger.getLogger("org.openqa").setLevel(Level.SEVERE)
 
 // Set default driver to HtmlUnit
-driver = { new HtmlUnitDriver() }
-
+driver = "htmlunit"
 
 //--- GEB ENVIRONMENT OVERRIDES ---//
 
 environments {
 
-    htmlunit {
+    //- Set the usual suspects (browsers) using geb shortcuts -//
+    chrome   { driver = "chrome"   }
+    firefox  { driver = "firefox"  }
+    htmlunit { driver = "htmlunit" }
+
+    //- Set the other browsers requiring configuration -// 
+    chromeHeadless {
         driver = {
-            new HtmlUnitDriver()
+           ChromeOptions o = new ChromeOptions()
+           o.addArguments('headless')
+           new ChromeDriver(o)
         }
     }
-
-    firefox {
-        driver = {
-            new FirefoxDriver()
-        }
-    }
-
     phantomjs {
         driver = {
             // Set up the PhantomJS Command Line Arguments to allow for SSL (https sites)
@@ -52,12 +51,6 @@ environments {
             // PhantomJS runs much faster if an explicit viewport size is set so...
             phantomJsDriver.manage().window().setSize(new Dimension(1028, 768))
             return phantomJsDriver
-        }
-    }
-
-    chrome {
-        driver = {
-            new ChromeDriver()
         }
     }
 
