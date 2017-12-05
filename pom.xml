@@ -8,17 +8,17 @@
     <version>1</version>
     <name>GebSpock Project Template</name>
     <properties>
-        <gebVersion>1.1</gebVersion>
-        <seleniumVersion>3.0.1</seleniumVersion>
+        <gebVersion>2.0</gebVersion>
+        <seleniumVersion>3.8.1</seleniumVersion>
         <groovyVersion>2.4.7</groovyVersion>
         <mavenCompilerVersion>3.1</mavenCompilerVersion>
         <groovyEclipseBatchVersion>2.4.3-01</groovyEclipseBatchVersion>
         <groovyEclipseCompilerVersion>2.9.2-01</groovyEclipseCompilerVersion>
         <junitVersion>4.12</junitVersion>
-        <spockCoreVersion>1.0-groovy-2.4</spockCoreVersion>
-        <htmlunitVersion>2.23.1</htmlunitVersion>
-        <phantomjsdriverVersion>1.2.1</phantomjsdriverVersion>
-        <safaridriverVersion>3.0.1</safaridriverVersion>
+        <spockCoreVersion>1.1-groovy-2.4</spockCoreVersion>
+        <htmlunitVersion>2.52.0</htmlunitVersion>
+        <phantomjsdriverVersion>1.4.2</phantomjsdriverVersion>
+        <safaridriverVersion>3.8.1</safaridriverVersion>
     </properties>
 
     <build>
@@ -115,7 +115,7 @@
           </dependency>  
           <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit-driver</artifactId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
             <version>${htmlunitVersion}</version>
             <scope>test</scope>
         </dependency> 
