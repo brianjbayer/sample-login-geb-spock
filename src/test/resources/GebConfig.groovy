@@ -3,6 +3,8 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.safari.SafariDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -27,6 +29,13 @@ environments {
     htmlunit { driver = "htmlunit" }
 
     //- Set the other browsers requiring configuration -// 
+    chromeHeadless {
+        driver = {
+           ChromeOptions o = new ChromeOptions()
+           o.addArguments('headless')
+           new ChromeDriver(o)
+        }
+    }
     phantomjs {
         driver = {
             // Set up the PhantomJS Command Line Arguments to allow for SSL (https sites)
