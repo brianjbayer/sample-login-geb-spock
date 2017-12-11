@@ -8,7 +8,7 @@ THIS IS AN EXAMPLE OF A VERY SIMPLE GEB PAGE (LANDING PAGE)
 
 class SampleSecureAreaPage extends Page {
 
-    static at = {  header.text() == "Secure Area" }
+    static at = {  header.text().contains("Secure Area") }
 
     static content= {
 
