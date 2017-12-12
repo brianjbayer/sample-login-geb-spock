@@ -1,14 +1,27 @@
 # sample-login-geb-spock
 
-
 ## Overview
+This is an example 
+[Geb](http://www.gebish.org)-[Spock](http://spockframework.org)-[Groovy](http://groovy-lang.org)
+implementation of Acceptance Test Driven Development (ATDD).
+**However, it also provides an extensible framework that can be reused
+by replacing the existing tests.**
+  
+These tests show how to use Geb-Spock to verify...
+* that critical elements are on a page
+* the ability to login as a user
+  
+It also demonstrates the basic features
+of the Geb-Spock framework and how they can be extended.
+This example contains...
+* support for multiple browsers
+* tagging (including and excluding)
+* Groovy metaprogramming
 
-This is a single module maven project which will execute the `sample-login-geb-spock`
-Automated Tests
-
+This is a single module maven project which will execute the automated tests.
 
 ## To Run the Automated Tests:
-To run the automated tests, execute...  
+To run the automated tests, execute...
 `mvn clean test` *command-line-arguments*
 
 * To run using the default "built in" htmlunit **subset** of tests, execute...  
