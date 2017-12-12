@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.samplelogin.geb.spock</groupId>
-    <artifactId>sample-login-geb-spock</artifactId>
+    <artifactId>sample-login-geb-spock-project</artifactId>
     <version>1</version>
     <name>Sample Login Using Geb Spock</name>
     <properties>
