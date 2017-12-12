@@ -1,21 +1,23 @@
-# sample-login-geb-spock-project
+# sample-login-geb-spock
 
 
 ## Overview
 
-This is a single module maven project which will execute the sample-login-geb-spock-project
+This is a single module maven project which will execute the `sample-login-geb-spock`
 Automated Tests
 
 
 ## To Run the Automated Tests:
-To run the automated tests, execute the following:
+To run the automated tests, execute...
+`mvn clean test` *command-line-arguments*
 
-mvn clean test *command-line-arguments*
+* To run using the default "built in" htmlunit **subset** of tests, execute...
+`mvn clean test`
 
 
 ### Command Line Arguments
 #### Specify Browser
--Dgeb.env=...
+`-Dgeb.env=`...
 
 **Example:**
 `-Dgeb.env=chrome`
@@ -30,19 +32,19 @@ Currently the following browsers are supported in this project:
 
 
 #### Specify Target Environment
--Dspock.run.target=...
+`-Dspock.run.target=`...
 
 **Example:**
 `-Dspock.run.target=qa`
 
 #### Specify Tests To Include (Only Run)
--Dspock.run.includes=...
+`-Dspock.run.includes=`...
 
 **Example:**
 `-Dspock.run.includes=allexcludedfromhtmlunit,ondemand`
 
 #### Specify Tests To Exclude
--Dspock.run.excludes=...
+`-Dspock.run.excludes=`...
 
 **Example:**
 `-Dspock.run.excludes=javascript`
