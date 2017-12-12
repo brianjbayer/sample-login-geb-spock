@@ -1,9 +1,9 @@
-# my-login-geb-spock-project
+# sample-login-geb-spock-project
 
 
 ## Overview
 
-This is a single module maven project which will execute the my-login-geb-spock-project 
+This is a single module maven project which will execute the sample-login-geb-spock-project
 Automated Tests
 
 
