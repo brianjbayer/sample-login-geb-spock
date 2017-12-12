@@ -1,4 +1,4 @@
-package com.gebspockproject.template.targetpages
+package com.samplelogin.geb.spock.targetpages
 
 public enum TargetPageType {
     //--- The Enumerations ---//

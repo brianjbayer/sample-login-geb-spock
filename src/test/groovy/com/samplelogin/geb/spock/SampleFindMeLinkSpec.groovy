@@ -1,10 +1,10 @@
-package com.gebspockproject.template
+package com.samplelogin.geb.spock
 
-import com.gebspockproject.template.modules.SampleFindMeLinkModule
-import com.gebspockproject.template.pages.SampleLoginPage
-import com.gebspockproject.template.pages.SamplePageWithFindMeLinkPage
-import com.gebspockproject.template.targetpages.TargetPageType
-import com.gebspockproject.template.targetpages.TargetPages
+import com.samplelogin.geb.spock.modules.SampleFindMeLinkModule
+import com.samplelogin.geb.spock.targetpages.TargetPageType
+import com.samplelogin.geb.spock.targetpages.TargetPages
+import com.samplelogin.geb.spock.pages.SampleLoginPage
+import com.samplelogin.geb.spock.pages.SamplePageWithFindMeLinkPage
 import spock.lang.Unroll
 
 /*

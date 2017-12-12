@@ -1,4 +1,4 @@
-package com.gebspockproject.template.modules
+package com.samplelogin.geb.spock.modules
 
 import geb.Module
 

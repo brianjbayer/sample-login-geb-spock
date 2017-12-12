@@ -1,6 +1,6 @@
-package com.gebspockproject.template.pages
+package com.samplelogin.geb.spock.pages
 
-import com.gebspockproject.template.modules.SampleFindMeLinkModule
+import com.samplelogin.geb.spock.modules.SampleFindMeLinkModule
 import geb.Page
 
 /*

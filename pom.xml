@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.gebspockproject.template</groupId>
-    <artifactId>gebspock-project-template</artifactId>
+    <groupId>com.samplelogin.geb.spock</groupId>
+    <artifactId>sample-login-geb-spock-project</artifactId>
     <version>1</version>
-    <name>GebSpock Project Template</name>
+    <name>Sample Login Using Geb Spock</name>
     <properties>
         <gebVersion>2.0</gebVersion>
         <seleniumVersion>3.8.1</seleniumVersion>

@@ -1,4 +1,4 @@
-package com.gebspockproject.template.viewports
+package com.samplelogin.geb.spock.viewports
 
 
 import org.openqa.selenium.Dimension

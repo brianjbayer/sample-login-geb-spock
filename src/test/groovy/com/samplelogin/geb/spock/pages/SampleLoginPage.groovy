@@ -1,4 +1,4 @@
-package com.gebspockproject.template.pages
+package com.samplelogin.geb.spock.pages
 
 /*
 THIS IS AN EXAMPLE OF A GEB PAGE WHICH INHERITS CONTENT

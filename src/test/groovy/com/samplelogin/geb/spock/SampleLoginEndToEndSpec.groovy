@@ -1,8 +1,8 @@
-package com.gebspockproject.template
+package com.samplelogin.geb.spock
 
-import com.gebspockproject.template.annotations.EndToEnd
-import com.gebspockproject.template.pages.SampleSecureAreaPage
-import com.gebspockproject.template.targetpages.TargetPageType
+import com.samplelogin.geb.spock.annotations.EndToEnd
+import com.samplelogin.geb.spock.pages.SampleSecureAreaPage
+import com.samplelogin.geb.spock.targetpages.TargetPageType
 import spock.lang.Unroll
 
 
