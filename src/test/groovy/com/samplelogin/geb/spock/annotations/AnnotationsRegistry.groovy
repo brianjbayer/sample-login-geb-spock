@@ -1,4 +1,4 @@
-package com.gebspockproject.template.annotations
+package com.samplelogin.geb.spock.annotations
 
 
 class AnnotationsRegistry {

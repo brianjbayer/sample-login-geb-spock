@@ -1,7 +1,7 @@
-package com.gebspockproject.template
+package com.samplelogin.geb.spock
 
-import com.gebspockproject.template.pages.SampleLoginPage
-import com.gebspockproject.template.targetpages.TargetPages
+import com.samplelogin.geb.spock.targetpages.TargetPages
+import com.samplelogin.geb.spock.pages.SampleLoginPage
 
 
 /*

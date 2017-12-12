@@ -1,4 +1,4 @@
-package com.gebspockproject.template.annotations
+package com.samplelogin.geb.spock.annotations
 
 import java.lang.annotation.ElementType
 import java.lang.annotation.Retention

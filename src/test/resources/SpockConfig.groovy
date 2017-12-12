@@ -1,5 +1,5 @@
-import com.gebspockproject.template.annotations.AnnotationsRegistry
-import com.gebspockproject.template.targetpages.TargetPages
+import com.samplelogin.geb.spock.annotations.AnnotationsRegistry
+import com.samplelogin.geb.spock.targetpages.TargetPages
 
 /***********************************************************************************************************
  *

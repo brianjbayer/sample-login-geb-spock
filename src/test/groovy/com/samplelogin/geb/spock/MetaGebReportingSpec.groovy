@@ -1,8 +1,8 @@
-package com.gebspockproject.template
+package com.samplelogin.geb.spock
 
 import geb.spock.GebReportingSpec
 import geb.navigator.Navigator
-import com.gebspockproject.template.viewports.Viewports
+import com.samplelogin.geb.spock.viewports.Viewports
 
 
 /*
