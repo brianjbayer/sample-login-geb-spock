@@ -45,7 +45,7 @@ environments {
         WebDriverManager.chromedriver().setup()
         driver = {
            ChromeOptions o = new ChromeOptions()
-           o.addArguments('headless')
+           o.setHeadless(true)
            new ChromeDriver(o)
         }
     }
@@ -53,7 +53,7 @@ environments {
         WebDriverManager.firefoxdriver().setup()
         driver = {
             FirefoxOptions o = new FirefoxOptions()
-            o.addArguments('--headless')
+            o.setHeadless(true)
             new FirefoxDriver(o)
         }
     }
