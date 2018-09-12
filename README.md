@@ -37,11 +37,11 @@ To run the automated tests, execute...
 
 Currently the following browsers are supported in this project:
 * `htmlunit` - the default
-* `chrome` - Google Chrome (requires Chrome and chromedriver)
-* `chromeHeadless` - Google Chrome run in headless mode (requires Chrome > 59 and chromedriver)
-* `firefox` - Mozilla Firefox (requires Firefox and geckodriver)
-* `firefoxHeadless` - Mozilla Firefox run in headless mode (requires Firefox > 56 and geckodriver)
-* `phantomjs` - PhantomJS headless browser (requires PhantomJS)
+* `chrome` - Google Chrome (requires Chrome)
+* `chromeHeadless` - Google Chrome run in headless mode (requires Chrome > 59)
+* `firefox` - Mozilla Firefox (requires Firefox)
+* `firefoxHeadless` - Mozilla Firefox run in headless mode (requires Firefox > 56)
+* `phantomjs` - PhantomJS headless browser 
 * `safari` - Apple Safari (requires Safari)
 
 
