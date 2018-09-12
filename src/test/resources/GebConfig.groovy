@@ -7,6 +7,7 @@ import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -22,16 +23,26 @@ Logger.getLogger("org.openqa").setLevel(Level.SEVERE)
 driver = "htmlunit"
 
 //--- GEB ENVIRONMENT OVERRIDES ---//
-
 environments {
 
     //- Set the usual suspects (browsers) using geb shortcuts -//
-    chrome   { driver = "chrome"   }
-    firefox  { driver = "firefox"  }
-    htmlunit { driver = "htmlunit" }
+    htmlunit {
+        driver = "htmlunit"
+    }
 
-    //- Set the other browsers requiring configuration -// 
+    chrome {
+        WebDriverManager.chromedriver().setup()
+        driver = "chrome"
+    }
+
+    firefox {
+        WebDriverManager.firefoxdriver().setup()
+        driver = "firefox"
+    }
+
+    //- Set the other browsers requiring configuration -//
     chromeHeadless {
+        WebDriverManager.chromedriver().setup()
         driver = {
            ChromeOptions o = new ChromeOptions()
            o.addArguments('headless')
@@ -39,6 +50,7 @@ environments {
         }
     }
     firefoxHeadless {
+        WebDriverManager.firefoxdriver().setup()
         driver = {
             FirefoxOptions o = new FirefoxOptions()
             o.addArguments('--headless')
@@ -46,6 +58,7 @@ environments {
         }
     }
     phantomjs {
+        WebDriverManager.phantomjs().setup()
         driver = {
             // Set up the PhantomJS Command Line Arguments to allow for SSL (https sites)
             // This recipe is modified from http://blog.swwomm.com/2014/10/phantomjs-and-ssl.html

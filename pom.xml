@@ -19,6 +19,7 @@
         <htmlunitVersion>2.32.1</htmlunitVersion>
         <phantomjsdriverVersion>1.4.4</phantomjsdriverVersion>
         <safaridriverVersion>3.14.0</safaridriverVersion>
+        <webdrivermanagerVersion>3.0.0</webdrivermanagerVersion>
     </properties>
 
     <build>
@@ -106,14 +107,14 @@
             <artifactId>geb-spock</artifactId>
             <version>${gebVersion}</version>
             <scope>test</scope>
-          </dependency>
-          <dependency>
+        </dependency>
+        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-server</artifactId>
             <version>${seleniumVersion}</version>
             <scope>test</scope>
-          </dependency>
-          <dependency>
+        </dependency>
+        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>htmlunit-driver</artifactId>
             <version>${htmlunitVersion}</version>
@@ -147,6 +148,12 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-safari-driver</artifactId>
             <version>${safaridriverVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanagerVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
