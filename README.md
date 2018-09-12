@@ -41,7 +41,7 @@ Currently the following browsers are supported in this project:
 * `chromeHeadless` - Google Chrome run in headless mode (requires Chrome > 59)
 * `firefox` - Mozilla Firefox (requires Firefox)
 * `firefoxHeadless` - Mozilla Firefox run in headless mode (requires Firefox > 56)
-* `phantomjs` - PhantomJS headless browser (requires PhantomJS)
+* `phantomjs` - PhantomJS headless browser 
 * `safari` - Apple Safari (requires Safari)
 
 
