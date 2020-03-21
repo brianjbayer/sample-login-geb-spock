@@ -16,8 +16,8 @@ import java.util.logging.Logger
 // Default Driver is HtmlUnit
 
 // Quiet HTMLUnit warnings
-Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.SEVERE)
-Logger.getLogger("org.openqa").setLevel(Level.SEVERE)
+Logger logger = Logger.getLogger("");
+logger.setLevel(Level.OFF);
 
 // Set default driver to HtmlUnit
 driver = "htmlunit"
