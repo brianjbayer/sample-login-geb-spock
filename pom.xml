@@ -9,17 +9,17 @@
     <name>Sample Login Using Geb Spock</name>
     <properties>
         <gebVersion>2.2</gebVersion>
-        <seleniumVersion>3.14.0</seleniumVersion>
+        <seleniumVersion>3.141.59</seleniumVersion>
         <groovyVersion>2.4.15</groovyVersion>
         <mavenCompilerVersion>3.7.0</mavenCompilerVersion>
         <groovyEclipseBatchVersion>2.4.3-01</groovyEclipseBatchVersion>
         <groovyEclipseCompilerVersion>2.9.2-01</groovyEclipseCompilerVersion>
         <junitVersion>4.12</junitVersion>
         <spockCoreVersion>1.1-groovy-2.4</spockCoreVersion>
-        <htmlunitVersion>2.32.1</htmlunitVersion>
+        <htmlunitVersion>2.38.0</htmlunitVersion>
         <phantomjsdriverVersion>1.4.4</phantomjsdriverVersion>
-        <safaridriverVersion>3.14.0</safaridriverVersion>
-        <webdrivermanagerVersion>3.0.0</webdrivermanagerVersion>
+        <safaridriverVersion>3.141.59</safaridriverVersion>
+        <webdrivermanagerVersion>3.8.1</webdrivermanagerVersion>
     </properties>
 
     <build>
@@ -122,12 +122,6 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-firefox-driver</artifactId>
-            <version>${seleniumVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-remote-driver</artifactId>
             <version>${seleniumVersion}</version>
             <scope>test</scope>
@@ -136,12 +130,6 @@
             <groupId>com.codeborne</groupId>
             <artifactId>phantomjsdriver</artifactId>
             <version>${phantomjsdriverVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>${seleniumVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
