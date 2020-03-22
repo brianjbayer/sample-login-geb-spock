@@ -1,52 +1,58 @@
 import org.openqa.selenium.Dimension
+import org.openqa.selenium.remote.DesiredCapabilities
+import org.testcontainers.containers.BrowserWebDriverContainer
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriverService
-import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import io.github.bonigarcia.wdm.WebDriverManager;
-
 import java.util.logging.Level
 import java.util.logging.Logger
 
 //--- DEFAULT DRIVER ---//
 // Default Driver is HtmlUnit
-
 // Quiet HTMLUnit warnings
 Logger logger = Logger.getLogger("");
 logger.setLevel(Level.OFF);
-
 // Set default driver to HtmlUnit
 driver = "htmlunit"
 
 //--- GEB ENVIRONMENT OVERRIDES ---//
 environments {
 
-    //- Set the usual suspects (browsers) using geb shortcuts -//
+    //- The default but limited htmlunit -//
     htmlunit {
         driver = "htmlunit"
     }
 
-    chrome {
-        WebDriverManager.chromedriver().setup()
-        driver = "chrome"
+    //- Selenium Browser Containers -//
+    "dockerChrome" {
+        driver = {
+            def container = new BrowserWebDriverContainer()
+                    .withCapabilities(new ChromeOptions())
+            container.start()
+            container.getWebDriver()
+        }
+    }
+    "dockerFirefox" {
+        driver = {
+            def container = new BrowserWebDriverContainer()
+                    .withCapabilities(new FirefoxOptions())
+            container.start()
+            container.getWebDriver()
+        }
     }
 
-    firefox {
-        WebDriverManager.firefoxdriver().setup()
-        driver = "firefox"
-    }
-
-    //- Set the other browsers requiring configuration -//
+    //- Headless Browsers -//
     chromeHeadless {
         WebDriverManager.chromedriver().setup()
         driver = {
-           ChromeOptions o = new ChromeOptions()
-           o.setHeadless(true)
-           new ChromeDriver(o)
+            ChromeOptions o = new ChromeOptions()
+            o.setHeadless(true)
+            new ChromeDriver(o)
         }
     }
     firefoxHeadless {
@@ -76,6 +82,15 @@ environments {
         }
     }
 
+    //- Local Browsers -//
+    chrome {
+        WebDriverManager.chromedriver().setup()
+        driver = "chrome"
+    }
+    firefox {
+        WebDriverManager.firefoxdriver().setup()
+        driver = "firefox"
+    }
     safari {
         driver = {
             new SafariDriver()
