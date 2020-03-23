@@ -29,7 +29,7 @@ environments {
     }
 
     //- Selenium Browser Containers -//
-    "dockerChrome" {
+    dockerChrome {
         driver = {
             def container = new BrowserWebDriverContainer()
                     .withCapabilities(new ChromeOptions())
@@ -37,7 +37,7 @@ environments {
             container.getWebDriver()
         }
     }
-    "dockerFirefox" {
+    dockerFirefox {
         driver = {
             def container = new BrowserWebDriverContainer()
                     .withCapabilities(new FirefoxOptions())
