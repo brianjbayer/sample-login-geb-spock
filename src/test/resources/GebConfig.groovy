@@ -1,5 +1,6 @@
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 import org.testcontainers.containers.BrowserWebDriverContainer
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
@@ -17,7 +18,6 @@ import java.util.logging.Logger
 // Quiet HTMLUnit warnings
 Logger logger = Logger.getLogger("");
 logger.setLevel(Level.OFF);
-// Set default driver to HtmlUnit
 driver = "htmlunit"
 
 //--- GEB ENVIRONMENT OVERRIDES ---//
@@ -26,6 +26,14 @@ environments {
     //- The default but limited htmlunit -//
     htmlunit {
         driver = "htmlunit"
+    }
+
+    //- Docker Compose Containers -//
+    seleniumchrome {
+        driver = {
+            def remoteWebDriverServerUrl = new URL("http://seleniumchrome:4444/wd/hub")
+            new RemoteWebDriver(remoteWebDriverServerUrl, DesiredCapabilities.chrome())
+        }
     }
 
     //- Selenium Browser Containers -//

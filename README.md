@@ -14,16 +14,41 @@ These tests show how to use Geb-Spock to verify...
 It also demonstrates the basic features
 of the Geb-Spock framework and how they can be extended.
 
+### Run Locally or in Containers
+This project can be run...
+* Fully locally running the tests against a local browser
+* Locally running the tests against a containerized browser
+* Fully in 2 separate Docker containers, one containing the
+tests the other the browser
+
 ### Contents of this Framework
 This framework contains support for...
+* Local thru fully containerized execution
 * Using Selenium Standalone containers eliminating the need for locally installed browsers or drivers
-* Support for multiple local browsers with automatic driver management
+* Multiple local browsers with automatic driver management
 * Tagging system (including and excluding)
 * Groovy metaprogramming
 
+## To Run the Automated Tests in Docker
+The tests in this project can be run be run fully in Docker
+assuming that Docker is installed and running.  This will build
+a docker image of this project and execute the tests against
+a Selenium Standalone container.
+
+### Prerequisites
+You must have docker installed and running on your local machine.
+
+### To Run Fully in Docker
+1. Ensure Docker is running
+2. Run the `project docker-compose.yml` file (this runs using the Chrome
+standalone container)
+```
+docker-compose up
+```
+
+## To Run the Automated Tests Locally
 This is a single module maven project which will execute the automated tests.
 
-## To Run the Automated Tests:
 To run the automated tests, execute...
 `mvn clean test` *command-line-arguments*
 
@@ -31,9 +56,13 @@ To run the automated tests, execute...
 `mvn clean test`
 
 ### To Run the Automated Tests Using Selenium Browser Containers
-The easiest way to run these tests is to use Docker and the Selenium Browser Containers.
+The easiest way to run these tests locally is to use Docker and the Selenium Browser Containers.
 1. Start Docker
 2. `mvn clean test -Dgeb.env=dockerChrome` or `mvn clean test -Dgeb.env=dockerFirefox`
+
+#### To See the Tests Run Using the VNC Server
+1. Connect to [vnc://localhost:5900](vnc://localhost:5900) (On Mac you can simply enter this address into a Browser)
+2. When prompted for the (default) password, enter `secret`
 
 ### Command Line Arguments
 #### Specify Browser
@@ -41,8 +70,6 @@ The easiest way to run these tests is to use Docker and the Selenium Browser Con
 
 **Example:**
 `-Dgeb.env=chrome`
-
-##### 
 
 Currently the following browsers are supported in this project:
 * `htmlunit` - the default
@@ -54,7 +81,6 @@ Currently the following browsers are supported in this project:
 * `firefoxHeadless` - Mozilla Firefox run in headless mode (requires Firefox > 56)
 * `phantomjs` - PhantomJS headless browser 
 * `safari` - Apple Safari (requires Safari)
-
 
 #### Specify Target Environment
 `-Dspock.run.target=`...
