@@ -1,0 +1,9 @@
+version: '2.1'
+services:
+  cvescanbrowsertests:
+    build: .
+    container_name: sample-login-geb-spock-tests
+    volumes:
+      - .:/app
+    command: mvn -f /home/app/pom.xml clean verify -DskipTests
+
