@@ -8,8 +8,9 @@
     <version>1</version>
     <name>Sample Login Using Geb Spock</name>
     <properties>
-        <mavenCompilerVersion>3.7.0</mavenCompilerVersion>
-        <groovyEclipseBatchVersion>3.0.2-02</groovyEclipseBatchVersion>
+        <mavenCompilerVersion>3.8.1</mavenCompilerVersion>
+        <mavenSurefirePluginVersion>3.0.0-M5</mavenSurefirePluginVersion>
+        <groovyEclipseBatchVersion>3.0.4-02</groovyEclipseBatchVersion>
         <groovyEclipseCompilerVersion>3.6.0-03</groovyEclipseCompilerVersion>
         <gebVersion>3.3</gebVersion>
         <spockCoreVersion>1.3-groovy-2.5</spockCoreVersion>
@@ -100,16 +101,15 @@
     <build>
         <testSourceDirectory>src/test/groovy</testSourceDirectory>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
+                <version>${mavenSurefirePluginVersion}</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.surefire</groupId>
                         <artifactId>surefire-junit47</artifactId>
-                        <version>3.0.0-M4</version>
+                        <version>${mavenSurefirePluginVersion}</version>
                     </dependency>
                 </dependencies>
                 <configuration>
