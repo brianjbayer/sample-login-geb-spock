@@ -1,0 +1,28 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  default-chrome:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: docker version
+        run: docker --version
+
+      - name: docker-compose version
+        run: docker-compose --version
+
+      - name: docker-compose pull
+        run: docker-compose pull
+
+      - name: Run Selenium Chrome
+        run: docker-compose run -d seleniumchrome
+
+      - name: Run Tests
+        run: docker-compose run browsertests
