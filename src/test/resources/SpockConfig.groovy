@@ -143,7 +143,7 @@ def getSetOfOptionalContextSpecificAnnotationsToExclude() {
     setOfContextSpecificAnnotationsToExclude.addAll(defaultExcludesSet)
 
     // Exclude any recommended tests from running under HtmlUnit which does not support all browser functionality
-    if (isDriverDefaultOrHtmlUnit()) {
+    if (isDriverHtmlUnit()) {
         final htmlUnitExcludesSet = AnnotationsRegistry.getSetOfRecommendedAnnotationsToExcludeUnderHtmlUnit()
         println "[runner] ......set of HtmlUnit context-specific annotations to exclude: [${htmlUnitExcludesSet.join(", ")}]"
         setOfContextSpecificAnnotationsToExclude.addAll(htmlUnitExcludesSet)
@@ -165,10 +165,9 @@ def getSetOfOptionalContextSpecificAnnotationsToExclude() {
 
 
 //--- CONTEXT DETERMINATION METHODS ---//
-boolean isDriverDefaultOrHtmlUnit() {
-    // This assumes that the default driver is HtmlUnit
+boolean isDriverHtmlUnit() {
     final gebEnv = System.getProperty("geb.env")
-    return ( (! gebEnv) || gebEnv.contains("htmlunit") )
+    return ( gebEnv.contains("htmlunit") )
 }
 
 
