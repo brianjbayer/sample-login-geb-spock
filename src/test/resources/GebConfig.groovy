@@ -13,12 +13,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.logging.Level
 import java.util.logging.Logger
 
-//--- DEFAULT DRIVER ---//
-// Default Driver is HtmlUnit
+//--- DRIVER ---//
 // Quiet HTMLUnit warnings
 Logger logger = Logger.getLogger("");
 logger.setLevel(Level.OFF);
-driver = "htmlunit"
+
+// There is No Default Driver - set as warning
+driver = "THERE IS NO DEFAULT DRIVER, IT MUST BE SPECIFIED"
 
 //--- GEB ENVIRONMENT OVERRIDES ---//
 environments {

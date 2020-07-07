@@ -52,8 +52,8 @@ This is a single module maven project which will execute the automated tests.
 To run the automated tests, execute...
 `mvn clean test` *command-line-arguments*
 
-* To run using the default "built in" htmlunit **subset** of tests, execute...  
-`mvn clean test`
+* To run using the "built in" htmlunit **subset** of tests, execute...  
+`mvn clean test -Dgeb.env=htmlunit`
 
 ### To Run the Automated Tests Using Selenium Browser Containers
 The easiest way to run these tests locally is to use Docker and the Selenium Browser Containers.
@@ -72,7 +72,7 @@ The easiest way to run these tests locally is to use Docker and the Selenium Bro
 `-Dgeb.env=chrome`
 
 Currently the following browsers are supported in this project:
-* `htmlunit` - the default
+* `htmlunit` - built-in
 * `dockerChrome` - managed Selenium Chrome Container
 * `dockerFirefox` - managed Selenium Firefox Container
 * `chrome` - Google Chrome (requires Chrome)
