@@ -4,8 +4,8 @@ services:
     build: .
     container_name: sample-login-geb-spock-tests
     volumes:
-      - .:/app
-    command: mvn -f /home/app/pom.xml clean test -Dgeb.env=seleniumchrome
+      - .:/home/app
+    command: mvn clean test -Dgeb.env=seleniumchrome
     depends_on:
       seleniumchrome:
         condition: service_healthy
