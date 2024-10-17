@@ -15,7 +15,7 @@
         <groovyEclipseCompilerVersion>3.6.0-03</groovyEclipseCompilerVersion>
         <gebSpockVersion>3.3</gebSpockVersion>
         <spockCoreVersion>2.0-M3-groovy-3.0</spockCoreVersion>
-        <groovyVersion>3.0.6</groovyVersion>
+        <groovyVersion>3.0.7</groovyVersion>
         <seleniumVersion>3.141.59</seleniumVersion>
         <safaridriverVersion>3.141.59</safaridriverVersion>
         <htmlunitVersion>2.44.0</htmlunitVersion>
