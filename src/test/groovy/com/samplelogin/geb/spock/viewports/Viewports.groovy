@@ -1,8 +1,6 @@
 package com.samplelogin.geb.spock.viewports
 
-
 import org.openqa.selenium.Dimension
-
 
 class Viewports {
 
@@ -22,7 +20,6 @@ class Viewports {
     public static final MIN_DESKTOP_WIDTH = (MAX_TABLET_WIDTH + 1)
     static final GENERIC_MIN_DESKTOP_BREAKPOINT = new Dimension(MIN_DESKTOP_WIDTH, GENERIC_HEIGHT)
 
-
     //--- SET BREAKPOINT METHODS ---//
     // Generic (Not Device Specific)
     public static final setToGenericMaxMobileBreakpoint(driver) {
@@ -41,6 +38,4 @@ class Viewports {
         driver.manage().window().setSize(GENERIC_MIN_DESKTOP_BREAKPOINT)
     }
 
-
 }
-

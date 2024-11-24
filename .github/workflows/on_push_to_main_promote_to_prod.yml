@@ -1,0 +1,85 @@
+name: Promote Branch Image to Production
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  # --- Image Names ---
+
+  branch-and-last-commit:
+    name: Merged Branch and Last Commit
+    uses: brianjbayer/actions-image-cicd/.github/workflows/get_merged_branch_last_commit.yml@v0.2.2
+
+  merged-image-names:
+    name: Merged (Branch) Image Names
+    needs:
+      - branch-and-last-commit
+    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2.2
+    with:
+      add_branch_name: true
+      branch_name: ${{ needs.branch-and-last-commit.outputs.branch }}
+      tag: ${{ needs.branch-and-last-commit.outputs.commit }}
+
+  production-image-names:
+    name: Production Image Names
+    needs:
+      - branch-and-last-commit
+    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2.2
+    with:
+      tag: ${{ needs.branch-and-last-commit.outputs.commit }}
+
+  # --- Promote Production Images ---
+
+  # Promote Deployment Image
+  promote-merged-deploy-image:
+    name: Promote Merged Deployment Image to Production
+    needs:
+      - merged-image-names
+      - production-image-names
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2.2
+    with:
+      source_image: ${{ needs.merged-image-names.outputs.vetted_image }}
+      target_image: ${{ needs.production-image-names.outputs.vetted_image }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  promote-merged-deploy-image-to-latest:
+    name: Promote Latest Deployment Image
+    needs:
+      - production-image-names
+      - promote-merged-deploy-image
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image_to_latest.yml@v0.2.2
+    with:
+      image: ${{ needs.production-image-names.outputs.vetted_image }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  # Promote Development Image
+  promote-merged-dev-image:
+    name: Promote Merged Development Image
+    needs:
+      - merged-image-names
+      - production-image-names
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2.2
+    with:
+      source_image: ${{ needs.merged-image-names.outputs.dev_image }}
+      target_image: ${{ needs.production-image-names.outputs.dev_image }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  promote-merged-dev-image-to-latest:
+    name: Promote Latest Development Image
+    needs:
+      - production-image-names
+      - promote-merged-dev-image
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image_to_latest.yml@v0.2.2
+    with:
+      image: ${{ needs.production-image-names.outputs.dev_image }}
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

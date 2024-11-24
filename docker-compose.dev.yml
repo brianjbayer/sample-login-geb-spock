@@ -1,0 +1,5 @@
+services:
+  browsertests:
+    image: "${BROWSERTESTS_IMAGE:-brianjbayer/sample-login-capybara-rspec-dev:latest}"
+    volumes:
+      - ${BROWSERTESTS_SRC:-.}:/app

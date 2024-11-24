@@ -1,0 +1,86 @@
+#!/bin/sh
+
+# Exit script on any errors
+set -e
+
+usage() {
+  cat << USAGE
+Usage: $0 [-cdho] [CMD]
+
+This script orchestrates 'docker compose run browsertests' using the docker compose framework
+  * Arguments are passed to the app service as the CMD (entrypoint)
+  * Environment variables override app and framework defaults
+
+OPTIONS: (in override order)
+  -o: Run only the browsertests service (no Selenium Browser)
+  -d: Run the docker-compose Dev environment
+  -c: Run the docker-compose CI environment (must specify BROWSERTESTS_IMAGE)
+USAGE
+}
+
+err_exit() {
+  err_code=$1
+  err_msg="$2"
+  echo "${err_msg}  --  Exit:[${err_code}]" 1>&2
+  exit $err_code
+}
+
+# Handle options
+while getopts ":cdho" options; do
+  case "${options}" in
+    c)
+      ci=1
+      ;;
+    d)
+      devenv=1
+      ;;
+    h)
+      usage ; exit
+      ;;
+    o)
+      browsertests_only=1
+      ;;
+    \?)
+      usage
+      err_exit 1 "Invalid Option: -$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+echo "DOCKER VERSION: [`docker --version`]"
+docker_compose_command='docker compose -f docker-compose.yml '
+
+[ -z ${browsertests_only} ] && docker_compose_command="${docker_compose_command} -f docker-compose.selenium.yml "
+
+[ ! -z ${devenv} ] && docker_compose_command="${docker_compose_command} -f docker-compose.dev.yml "
+[ ! -z ${ci} ] && docker_compose_command="${docker_compose_command} -f docker-compose.ci.yml "
+
+# Default is to run the browsertests, but must specify --service-ports
+# (by default docker compose run does not expose host ports)
+run_command='run --rm --service-ports browsertests '
+
+docker_compose_run_command="${docker_compose_command} ${run_command}"
+echo "DOCKER COMPOSE RUN COMMAND: [${docker_compose_run_command}]"
+
+echo 'DOCKER COMPOSE CONFIGURATION...'
+$docker_compose_command config
+
+echo 'DOCKER COMPOSE PULLING...'
+set +e ; $docker_compose_command pull ; set -e
+
+echo "DOCKER COMPOSE RUNNING [${docker_compose_run_command}] [$@]..."
+# Allow to fail but catch return code
+set +e
+${docker_compose_run_command} "$@"
+run_return_code=$?
+set -e
+
+run_disposition='SUCCESS' ; [ $run_return_code -eq 0 ] || run_disposition='FAIL'
+echo "DOCKER COMPOSE RUN [${run_disposition}] WITH RETURN CODE [${run_return_code}]"
+
+echo 'DOCKER-COMPOSE DOWN...'
+$docker_compose_command down
+
+echo "EXIT: ${run_disposition} [${run_return_code}]"
+exit $run_return_code

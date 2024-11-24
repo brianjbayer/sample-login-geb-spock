@@ -1,109 +1,51 @@
-import org.openqa.selenium.Dimension
-import org.openqa.selenium.remote.DesiredCapabilities
 import org.openqa.selenium.remote.RemoteWebDriver
-import org.testcontainers.containers.BrowserWebDriverContainer
-import org.openqa.selenium.firefox.FirefoxDriver
-import org.openqa.selenium.firefox.FirefoxOptions
-import org.openqa.selenium.phantomjs.PhantomJSDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriverService
-import org.openqa.selenium.safari.SafariDriver
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.chrome.ChromeOptions
-import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.logging.Level
 import java.util.logging.Logger
 
 //--- DRIVER ---//
-// Quiet HTMLUnit warnings
-Logger logger = Logger.getLogger("");
-logger.setLevel(Level.OFF);
+// Quiet some warnings
+Logger logger = Logger.getLogger('')
+logger.setLevel(Level.OFF)
 
-// There is No Default Driver - set as warning
-driver = "THERE IS NO DEFAULT DRIVER, IT MUST BE SPECIFIED"
+browser = getBrowser()
+browserOptions = browserOptions(browser)
 
-//--- GEB ENVIRONMENT OVERRIDES ---//
-environments {
+remoteURL = getRemoteURL()
 
-    //- The default but limited htmlunit -//
-    htmlunit {
-        driver = "htmlunit"
-    }
+if (remoteURL) {
+    driver = { remoteBrowser(browserOptions, remoteURL) }
+} else {
+    driver = { localBrowser(browserOptions) }
+}
 
-    //- Docker Compose Containers -//
-    seleniumchrome {
-        driver = {
-            def remoteWebDriverServerUrl = new URL("http://seleniumchrome:4444/wd/hub")
-            new RemoteWebDriver(remoteWebDriverServerUrl, DesiredCapabilities.chrome())
-        }
-    }
+//--- METHODS ---//
+def remoteBrowser(browserOptions, url) {
+    final remoteWebDriverServerUrl = new URL(url)
+    new RemoteWebDriver(remoteWebDriverServerUrl, browserOptions)
+}
 
-    //- Selenium Browser Containers -//
-    dockerChrome {
-        driver = {
-            def container = new BrowserWebDriverContainer()
-                    .withCapabilities(new ChromeOptions())
-            container.start()
-            container.getWebDriver()
-        }
-    }
-    dockerFirefox {
-        driver = {
-            def container = new BrowserWebDriverContainer()
-                    .withCapabilities(new FirefoxOptions())
-            container.start()
-            container.getWebDriver()
-        }
-    }
+def localBrowser(browserOptions) {
+    final browserDriverClassName = "org.openqa.selenium.${browser}.${browser.capitalize()}Driver"
+    browserDriver = this.class.classLoader.loadClass( browserDriverClassName, true, false )?.newInstance(browserOptions)
+}
 
-    //- Headless Browsers -//
-    chromeHeadless {
-        WebDriverManager.chromedriver().setup()
-        driver = {
-            ChromeOptions o = new ChromeOptions()
-            o.setHeadless(true)
-            new ChromeDriver(o)
-        }
+def browserOptions(browser) {
+    final browserOptionsClassName = "org.openqa.selenium.${browser}.${browser.capitalize()}Options"
+    browserOptions = this.class.classLoader.loadClass( browserOptionsClassName, true, false )?.newInstance()
+    if (isHeadless()) {
+        browserOptions.addArguments('--headless')
     }
-    firefoxHeadless {
-        WebDriverManager.firefoxdriver().setup()
-        driver = {
-            FirefoxOptions o = new FirefoxOptions()
-            o.setHeadless(true)
-            new FirefoxDriver(o)
-        }
-    }
-    phantomjs {
-        WebDriverManager.phantomjs().setup()
-        driver = {
-            // Set up the PhantomJS Command Line Arguments to allow for SSL (https sites)
-            // This recipe is modified from http://blog.swwomm.com/2014/10/phantomjs-and-ssl.html
-            final phantomjsSslCliArgs = [
-                    "--web-security=false",
-                    "--ssl-protocol=any",
-                    "--ignore-ssl-errors=true"
-            ]
-            def desiredCapabilities = DesiredCapabilities.phantomjs()
-            desiredCapabilities.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, phantomjsSslCliArgs)
-            def phantomJsDriver = new PhantomJSDriver(desiredCapabilities)
-            // PhantomJS runs much faster if an explicit viewport size is set so...
-            phantomJsDriver.manage().window().setSize(new Dimension(1028, 768))
-            return phantomJsDriver
-        }
-    }
+    browserOptions
+}
 
-    //- Local Browsers -//
-    chrome {
-        WebDriverManager.chromedriver().setup()
-        driver = "chrome"
-    }
-    firefox {
-        WebDriverManager.firefoxdriver().setup()
-        driver = "firefox"
-    }
-    safari {
-        driver = {
-            new SafariDriver()
-        }
-    }
+def getBrowser() {
+    System.getProperty('geb.browser', '').toLowerCase()
+}
 
+def getRemoteURL() {
+    System.getProperty('geb.remoteUrl')
+}
+
+def isHeadless() {
+    System.getProperty('geb.headless') && true
 }
