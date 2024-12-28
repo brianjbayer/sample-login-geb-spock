@@ -1,4 +1,4 @@
-## Development of sample-login-capybara-rspec
+## Development
 This project can be developed using the supplied container-based
 development environment which includes Java and Maven.
 

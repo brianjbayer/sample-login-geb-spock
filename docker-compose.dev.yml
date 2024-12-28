@@ -1,5 +1,5 @@
 services:
   browsertests:
-    image: "${BROWSERTESTS_IMAGE:-brianjbayer/sample-login-capybara-rspec-dev:latest}"
+    image: "${BROWSERTESTS_IMAGE:-brianjbayer/sample-login-geb-spock-dev:latest}"
     volumes:
       - ${BROWSERTESTS_SRC:-.}:/app
