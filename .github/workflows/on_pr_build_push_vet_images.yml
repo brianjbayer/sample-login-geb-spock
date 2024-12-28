@@ -2,8 +2,6 @@ name: Build and Vet
 
 on:
   pull_request:
-    branches:
-      - master
 
 jobs:
 
@@ -91,7 +89,7 @@ jobs:
     name: Promote Vetted Deployment Image
     needs:
       - image-names
-      # - vet-lint-and-dependency-security
+      - vet-dependency-security
       - vet-e2e-tests-deployment
     uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2.2
     with:
