@@ -5,28 +5,56 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.samplelogin.geb.spock</groupId>
     <artifactId>sample-login-geb-spock</artifactId>
-    <version>1</version>
+    <version>2</version>
     <name>Sample Login Using Geb Spock</name>
     <properties>
-        <mavenCompilerVersion>3.8.1</mavenCompilerVersion>
-        <mavenSurefirePluginVersion>3.0.0-M5</mavenSurefirePluginVersion>
-        <dependencyCheckMavenVersion>6.0.2</dependencyCheckMavenVersion>
-        <groovyEclipseBatchVersion>3.0.6-01</groovyEclipseBatchVersion>
-        <groovyEclipseCompilerVersion>3.6.0-03</groovyEclipseCompilerVersion>
-        <gebSpockVersion>3.3</gebSpockVersion>
-        <spockCoreVersion>2.0-M3-groovy-3.0</spockCoreVersion>
-        <groovyVersion>3.0.6</groovyVersion>
-        <seleniumVersion>3.141.59</seleniumVersion>
-        <safaridriverVersion>3.141.59</safaridriverVersion>
-        <htmlunitVersion>2.44.0</htmlunitVersion>
-        <phantomjsdriverVersion>1.4.4</phantomjsdriverVersion>
-        <testcontainersSeleniumVersion>1.14.3</testcontainersSeleniumVersion>
-        <webdrivermanagerVersion>4.2.2</webdrivermanagerVersion>
+        <groovyGroupId>org.codehaus.groovy</groovyGroupId>
+
+        <mavenCompilerVersion>3.13.0</mavenCompilerVersion>
+        <mavenSurefirePluginVersion>3.5.2</mavenSurefirePluginVersion>
+        <dependencyCheckMavenVersion>6.5.3</dependencyCheckMavenVersion>
+        <groovyEclipseBatchVersion>3.0.8-01</groovyEclipseBatchVersion>
+        <groovyEclipseCompilerVersion>3.7.0</groovyEclipseCompilerVersion>
+        <jUnitPlatformLauncherVersion>1.11.4</jUnitPlatformLauncherVersion>
+        <gebSpockVersion>7.0</gebSpockVersion>
+        <spockCoreVersion>2.4-M4-groovy-4.0</spockCoreVersion>
+        <groovyVersion>4.0.24</groovyVersion>
+        <seleniumVersion>4.27.0</seleniumVersion>
+        <safaridriverVersion>4.27.0</safaridriverVersion>
+
+        <!-- Environment Variable Configuration for the Tests-->
+        <geb.build.baseUrl>${env.BASE_URL}</geb.build.baseUrl>
+        <geb.browser>${env.BROWSER}</geb.browser>
+        <geb.headless>${env.HEADLESS}</geb.headless>
+        <geb.remoteUrl>${env.REMOTE_URL}</geb.remoteUrl>
+        <geb.test.validUsername>${env.LOGIN_USERNAME}</geb.test.validUsername>
+        <geb.test.validPassword>${env.LOGIN_PASSWORD}</geb.test.validPassword>
     </properties>
 
     <dependencies>
+        <!-- Indirect Dependencies for CVE Resolution -->
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit 5 Spock 2 -->
+        <!-- https://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${jUnitPlatformLauncherVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.groovy </groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovyVersion}</version>
             <type>pom</type>
@@ -38,7 +66,7 @@
             <scope>test</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
+                    <groupId>org.apache.groovy</groupId>
                     <artifactId>groovy-all</artifactId>
                 </exclusion>
             </exclusions>
@@ -51,14 +79,8 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-server</artifactId>
+            <artifactId>selenium-java</artifactId>
             <version>${seleniumVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit-driver</artifactId>
-            <version>${htmlunitVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -68,27 +90,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>selenium</artifactId>
-            <version>${testcontainersSeleniumVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>phantomjsdriver</artifactId>
-            <version>${phantomjsdriverVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-safari-driver</artifactId>
             <version>${safaridriverVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>${webdrivermanagerVersion}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -97,6 +101,7 @@
         <testSourceDirectory>src/test/groovy</testSourceDirectory>
         <plugins>
             <plugin>
+               <!-- Dependency Security Scanning -->
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>${dependencyCheckMavenVersion}</version>
@@ -104,8 +109,9 @@
                     <failBuildOnCVSS>1</failBuildOnCVSS>
                     <skipSystemScope>true</skipSystemScope>
                     <suppressionFiles>
-                        <suppressionFile>groovy-ant-18-suppression.xml</suppressionFile>
+                        <suppressionFile>suppress-jackson-core-2182.xml</suppressionFile>
                     </suppressionFiles>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                 </configuration>
                 <executions>
                     <execution>
@@ -126,17 +132,24 @@
                     </includes>
                     <systemPropertyVariables>
                         <geb.build.reportsDir>target/test-reports/geb</geb.build.reportsDir>
+                        <geb.build.baseUrl>${geb.build.baseUrl}</geb.build.baseUrl>
+                        <!-- Custom Configuration -->
+                        <geb.browser>${geb.browser}</geb.browser>
+                        <geb.headless>${geb.headless}</geb.headless>
+                        <geb.remoteUrl>${geb.remoteUrl}</geb.remoteUrl>
+                        <geb.test.validUsername>${geb.test.validUsername}</geb.test.validUsername>
+                        <geb.test.validPassword>${geb.test.validPassword}</geb.test.validPassword>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.groovy</groupId>
+                <groupId>${groovyGroupId}</groupId>
                 <artifactId>groovy-eclipse-compiler</artifactId>
                 <version>${groovyEclipseCompilerVersion}</version>
                 <extensions>true</extensions>
                 <dependencies>
                     <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
+                        <groupId>${groovyGroupId}</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
                         <version>${groovyEclipseBatchVersion}</version>
                     </dependency>
@@ -148,18 +161,16 @@
                 <version>${mavenCompilerVersion}</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
-                    <source>1.8</source>
-                    <target>1.8</target>
                     <encoding>utf-8</encoding>
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
+                        <groupId>${groovyGroupId}</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
                         <version>${groovyEclipseCompilerVersion}</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
+                        <groupId>${groovyGroupId}</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
                         <version>${groovyEclipseBatchVersion}</version>
                     </dependency>

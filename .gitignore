@@ -3,11 +3,10 @@
 .settings
 nb-configuration.xml
 target/
-.idea/
 *.iml
 *.ipr
-*.DS_Store
 ***/node_modules/
 ***/node/
 /**/.sass-cache/
 /bin/
+*.env*

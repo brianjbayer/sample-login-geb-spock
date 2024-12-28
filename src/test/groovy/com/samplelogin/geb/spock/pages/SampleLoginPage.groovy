@@ -1,32 +1,60 @@
 package com.samplelogin.geb.spock.pages
 
-/*
-THIS IS AN EXAMPLE OF A GEB PAGE WHICH INHERITS CONTENT
+import com.samplelogin.geb.spock.modules.SampleFindMeLinkModule
 
-IT ALSO CONTAINS A CONTENT METHOD
-*/
+class SampleLoginPage extends BasePage {
 
-class SampleLoginPage extends SamplePageWithFindMeLinkPage {
+    static url = '/login'
 
-    public static final SAMPLE_LOGIN_TIMEOUT = 5
+    // Page specific waits
+    public static final TIMEOUT = 5
+    static timeout() { SampleLoginPage.TIMEOUT }
 
-    static at = {  header.text() == "Login Page" }
+    static at = { header.text() == 'Login Page' }
 
-    static content= {
+    static content = {
+        findMeLink(wait: SampleLoginPage.timeout()) { module SampleFindMeLinkModule }
 
-        header { $("h2") }
-        
-        loginForm { $("form[name=login]") }
-        loginFormUsernameInput { loginForm.$("input[name=username]") }
-        loginFormPasswordInput { loginForm.$("input[name=password]") }
-        loginFormSubmitButton  { loginForm.$("button[type=submit]") }
+        header(wait: SampleLoginPage.timeout()) { $('h2') }
 
+        loginForm(wait: SampleLoginPage.timeout()) { $('form[name=login]') }
+        loginFormUsernameInput(wait: SampleLoginPage.timeout()) { loginForm.$('input[name=username]') }
+        loginFormPasswordInput(wait: SampleLoginPage.timeout()) { loginForm.$('input[name=password]') }
+        loginFormSubmitButton(wait: SampleLoginPage.timeout()) { loginForm.$('button[type=submit]') }
+
+        login_error(wait: SampleLoginPage.timeout()) { $('#flash') }
     }
-
 
     def loginWithValidUserCredentials() {
-        loginFormUsernameInput.value("tomsmith")
-        loginFormPasswordInput.value("SuperSecretPassword!")
+        login(validUsername(), validPassword())
+    }
+
+    def loginWithInvalidPassword() {
+        login(validUsername(), 'NotAValidPassword')
+    }
+
+    def login(username, password) {
+        loginFormUsernameInput.value(username)
+        loginFormPasswordInput.value(password)
         loginFormSubmitButton.click()
     }
+
+    def getRequiredProperty(property) {
+        final propertyValue = System.getProperty(property)
+        if (!propertyValue) {
+            throw new IllegalStateException("Required system property '$property' is not set!")
+        }
+        propertyValue
+    }
+
+    def validUsername() {
+        // final validUsername = System.getProperty("geb.test.validUsername")
+        getRequiredProperty('geb.test.validUsername')
+    }
+
+    def validPassword() {
+        // System.getProperty("geb.test.validPassword")
+        getRequiredProperty('geb.test.validPassword')
+    }
+
 }

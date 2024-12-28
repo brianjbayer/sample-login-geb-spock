@@ -1,0 +1,46 @@
+name: Run End-to-End Tests
+
+on:
+  workflow_call:
+    inputs:
+      runner:
+        description: "The type of runner for this workflow (Default: ubuntu-latest)"
+        required: false
+        type: string
+        default: ubuntu-latest
+      e2e_tests_image:
+        description: "The End-to-End tests image to run"
+        required: true
+        type: string
+      e2e_tests_command:
+        description: "The End-to-End tests image to run"
+        required: true
+        type: string
+
+    secrets:
+      login_username:
+        description: The username for the test login
+        required: true
+      login_password:
+        description: The password for the test login
+        required: true
+
+jobs:
+  e2e-tests:
+    name: End-to-End Tests
+    runs-on: ${{ inputs.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+    env:
+      BROWSERTESTS_IMAGE: ${{ inputs.e2e_tests_image }}
+      BROWSER: ${{ matrix.browser }}
+      SELENIUM_IMAGE: selenium/standalone-${{ matrix.browser }}:latest
+      BASE_URL: "https://the-internet.herokuapp.com"
+      LOGIN_USERNAME: ${{ secrets.login_username }}
+      LOGIN_PASSWORD: ${{ secrets.login_password }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: dockercomposerun e2e tests
+        run: ${{ inputs.e2e_tests_command }}

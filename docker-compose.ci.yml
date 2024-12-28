@@ -1,0 +1,3 @@
+services:
+  browsertests:
+    image: "${BROWSERTESTS_IMAGE}"
