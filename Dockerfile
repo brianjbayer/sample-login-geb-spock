@@ -1,5 +1,4 @@
 #--- Base Image ---
-# Ruby version must match that in Gemfile.lock
 ARG BASE_IMAGE=maven:3.8-adoptopenjdk-16
 FROM ${BASE_IMAGE} AS maven-jdk
 

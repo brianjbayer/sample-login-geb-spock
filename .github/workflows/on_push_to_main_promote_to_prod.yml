@@ -2,7 +2,7 @@ name: Promote Branch Image to Production
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
 
