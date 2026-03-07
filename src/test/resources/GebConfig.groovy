@@ -32,9 +32,15 @@ def localBrowser(browserOptions) {
 def browserOptions(browser) {
     final browserOptionsClassName = "org.openqa.selenium.${browser}.${browser.capitalize()}Options"
     browserOptions = this.class.classLoader.loadClass( browserOptionsClassName, true, false )?.newInstance()
-    if (isHeadless()) {
-        browserOptions.addArguments('--headless')
+
+    isHeadless() && browserOptions.addArguments('--headless')
+
+    // Browser-specific Configuration
+    browserOptions.with {
+        // Chromium: Disable Change your password popup
+        browser == 'chrome' && setExperimentalOption("prefs", ["profile.password_manager_leak_detection": false])
     }
+
     browserOptions
 }
 
