@@ -1,0 +1,109 @@
+#!/bin/sh
+
+# --- Project Commands ---
+# Framework commands
+maven='mvn'
+clean='clean'
+
+# Running tests
+tests='test'
+
+# Code standards
+secscan='verify -DskipTests'
+
+usage() {
+  cat << USAGE
+Usage: $0 [-ch] [COMMAND] [ARG...]
+This is the project "run" script, executing common application tasks.
+
+If the COMMAND is not recognized, it runs all arguments as a command:
+
+COMMANDS:
+  secscan:  Run the security scanner [$secscan_cmd]
+
+  tests:    Run the tests [$tests_cmd]
+
+  [COMMAND] [ARG...]: Run any other command with arguments
+
+OPTIONS:
+  -c: Clean mode (i.e. $maven, $clean)
+
+  -h: Show this help message
+USAGE
+}
+
+# --- Functions ---
+err_exit() {
+  err_code=$1
+  err_msg="$2"
+  echo "${err_msg} (${err_code})" 1>&2
+  exit $err_code
+}
+
+run_and_exit_return_code () {
+  # Exit script on any errors
+  set -e
+
+  command_to_run="$@"
+  [ -z "$command_to_run" ] && err_exit 1 "Missing argument"
+
+  # Run the command and preserve exit code
+  echo "RUNNING [${command_to_run} ]..."
+  # Allow to fail but catch return code
+  set +e
+  $command_to_run
+  run_return_code=$?
+  # NOTE return code must be caught before any other command
+  set -e
+  echo ''
+
+  echo "EXITING WITH RUN RETURN CODE [${run_return_code}]"
+  exit $run_return_code
+}
+
+# --- MAIN ---
+# Exit script on any errors
+set -e
+
+while getopts ":ch" options; do
+  case "${options}" in
+    c)
+      clean_mode=1
+      ;;
+    h)
+      usage ; exit
+      ;;
+    \?)
+      usage
+      err_exit 1 "Invalid Option: -$OPTARG"
+      ;;
+  esac
+done
+shift $((OPTIND-1))
+
+# Set the full maven commands
+maven_command="$maven"
+[ -n "$clean_mode" ] && maven_command="$maven_command $clean"
+
+secscan_cmd="$maven_command $secscan"
+tests_cmd="$maven_command $tests"
+
+# Set command to run if recognized COMMAND
+command="${1}"
+
+[ "$command" = 'secscan' ] && run_command="$secscan_cmd"
+
+[ "$command" = 'tests' ] && run_command="$tests_cmd"
+
+if [ -n "$run_command" ]; then
+  shift
+  run_command="${run_command} $@"
+  echo "RUNNING COMMAND [${action}]"
+else
+# No recognized actions so run all the arguments as the command"
+  run_command="$@"
+fi
+
+# Run the command and exit passing any arguments
+run_and_exit_return_code "$run_command"
+err_exit 99 "LOGIC ERROR"

@@ -10,13 +10,13 @@ jobs:
 
   branch-and-last-commit:
     name: Merged Branch and Last Commit
-    uses: brianjbayer/actions-image-cicd/.github/workflows/get_merged_branch_last_commit.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/get_merged_branch_last_commit.yml@v0.2
 
   merged-image-names:
     name: Merged (Branch) Image Names
     needs:
       - branch-and-last-commit
-    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2
     with:
       add_branch_name: true
       branch_name: ${{ needs.branch-and-last-commit.outputs.branch }}
@@ -26,9 +26,13 @@ jobs:
     name: Production Image Names
     needs:
       - branch-and-last-commit
-    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2
     with:
       tag: ${{ needs.branch-and-last-commit.outputs.commit }}
+
+  latest-tag:
+    name: Latest Tag
+    uses: brianjbayer/actions-image-cicd/.github/workflows/latest_tag.yml@v0.2
 
   # --- Promote Production Images ---
 
@@ -38,7 +42,7 @@ jobs:
     needs:
       - merged-image-names
       - production-image-names
-    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2
     with:
       source_image: ${{ needs.merged-image-names.outputs.vetted_image }}
       target_image: ${{ needs.production-image-names.outputs.vetted_image }}
@@ -49,11 +53,13 @@ jobs:
   promote-merged-deploy-image-to-latest:
     name: Promote Latest Deployment Image
     needs:
-      - production-image-names
       - promote-merged-deploy-image
-    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image_to_latest.yml@v0.2.2
+      - production-image-names
+      - latest-tag
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2
     with:
-      image: ${{ needs.production-image-names.outputs.vetted_image }}
+      source_image: ${{ needs.production-image-names.outputs.vetted_image }}
+      target_image: "${{ needs.production-image-names.outputs.vetted_repository }}:${{ needs.latest-tag.outputs.tag }}"
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -64,7 +70,7 @@ jobs:
     needs:
       - merged-image-names
       - production-image-names
-    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2
     with:
       source_image: ${{ needs.merged-image-names.outputs.dev_image }}
       target_image: ${{ needs.production-image-names.outputs.dev_image }}
@@ -75,11 +81,33 @@ jobs:
   promote-merged-dev-image-to-latest:
     name: Promote Latest Development Image
     needs:
-      - production-image-names
       - promote-merged-dev-image
-    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image_to_latest.yml@v0.2.2
+      - production-image-names
+      - latest-tag
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2
     with:
-      image: ${{ needs.production-image-names.outputs.dev_image }}
+      source_image: ${{ needs.production-image-names.outputs.dev_image }}
+      target_image: "${{ needs.production-image-names.outputs.dev_repository }}:${{ needs.latest-tag.outputs.tag }}"
+    secrets:
+      registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
+      registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+  # --- Delete PR Branch Image Repositories ---
+
+  delete-pr-branch-image-repositories:
+    name: Delete PR Branch Image Repositories
+    needs:
+      - merged-image-names
+      - promote-merged-dev-image-to-latest
+      - promote-merged-deploy-image-to-latest
+    uses: brianjbayer/actions-image-cicd/.github/workflows/delete_docker_hub_repositories.yml@v0.2
+    with:
+      repositories: >
+        [
+          "${{ needs.merged-image-names.outputs.dev_repository }}",
+          "${{ needs.merged-image-names.outputs.unvetted_repository }}",
+          "${{ needs.merged-image-names.outputs.vetted_repository }}"
+        ]
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

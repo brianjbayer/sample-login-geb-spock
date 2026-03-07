@@ -1,60 +1,74 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.samplelogin.geb.spock</groupId>
     <artifactId>sample-login-geb-spock</artifactId>
     <version>2</version>
     <name>Sample Login Using Geb Spock</name>
+
     <properties>
         <groovyGroupId>org.codehaus.groovy</groovyGroupId>
 
-        <mavenCompilerVersion>3.13.0</mavenCompilerVersion>
-        <mavenSurefirePluginVersion>3.5.2</mavenSurefirePluginVersion>
-        <dependencyCheckMavenVersion>6.5.3</dependencyCheckMavenVersion>
+        <mavenCompilerVersion>3.15.0</mavenCompilerVersion>
+        <mavenSurefirePluginVersion>3.5.5</mavenSurefirePluginVersion>
+        <dependencyCheckMavenVersion>12.2.0</dependencyCheckMavenVersion>
         <groovyEclipseBatchVersion>3.0.8-01</groovyEclipseBatchVersion>
         <groovyEclipseCompilerVersion>3.7.0</groovyEclipseCompilerVersion>
-        <jUnitPlatformLauncherVersion>1.11.4</jUnitPlatformLauncherVersion>
+        <jUnitBomVersion>5.13.3</jUnitBomVersion>
         <gebSpockVersion>7.0</gebSpockVersion>
-        <spockCoreVersion>2.4-M4-groovy-4.0</spockCoreVersion>
-        <groovyVersion>4.0.24</groovyVersion>
-        <seleniumVersion>4.27.0</seleniumVersion>
-        <safaridriverVersion>4.27.0</safaridriverVersion>
+        <spockCoreVersion>2.4-groovy-4.0</spockCoreVersion>
+        <groovyVersion>4.0.30</groovyVersion>
+        <seleniumVersion>4.28.0</seleniumVersion>
+        <safaridriverVersion>4.28.0</safaridriverVersion>
 
-        <!-- Environment Variable Configuration for the Tests-->
+        <!-- Environment Variable Configuration -->
+        <!-- Used in Tests -->
         <geb.build.baseUrl>${env.BASE_URL}</geb.build.baseUrl>
         <geb.browser>${env.BROWSER}</geb.browser>
         <geb.headless>${env.HEADLESS}</geb.headless>
         <geb.remoteUrl>${env.REMOTE_URL}</geb.remoteUrl>
         <geb.test.validUsername>${env.LOGIN_USERNAME}</geb.test.validUsername>
         <geb.test.validPassword>${env.LOGIN_PASSWORD}</geb.test.validPassword>
+        <!-- Used in Dependency Security Scanning -->
+        <nvd.apiKey>${env.NVD_API_KEY}</nvd.apiKey>
     </properties>
 
+    <!-- Dependency Management for JUnit BOM -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Align all JUnit 5 / Platform artifacts -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${jUnitBomVersion}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <!-- Indirect Dependencies for CVE Resolution -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.18.2</version>
-        </dependency>
+        <!-- JUnit 5 / Jupiter -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.11.4</version>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
-        <!-- JUnit 5 Spock 2 -->
-        <!-- https://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven -->
+        <!-- JUnit Platform launcher for Surefire -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
-            <version>${jUnitPlatformLauncherVersion}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Groovy / Spock / Geb -->
         <dependency>
-            <groupId>org.apache.groovy </groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovyVersion}</version>
             <type>pom</type>
@@ -77,6 +91,8 @@
             <version>${gebSpockVersion}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- Selenium -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -100,18 +116,22 @@
     <build>
         <testSourceDirectory>src/test/groovy</testSourceDirectory>
         <plugins>
+
+            <!-- Dependency Security Scanning -->
             <plugin>
-               <!-- Dependency Security Scanning -->
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>${dependencyCheckMavenVersion}</version>
                 <configuration>
+                    <nvdApiKey>${nvd.apiKey}</nvdApiKey>
                     <failBuildOnCVSS>1</failBuildOnCVSS>
                     <skipSystemScope>true</skipSystemScope>
-                    <suppressionFiles>
-                        <suppressionFile>suppress-jackson-core-2182.xml</suppressionFile>
-                    </suppressionFiles>
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                    <nvdValidForHours>24</nvdValidForHours>
+                    <dataDirectory>${project.build.directory}/dependency-check-data</dataDirectory>
+                    <suppressionFiles>
+                        <suppressionFile>suppress-jline-50572.xml</suppressionFile>
+                    </suppressionFiles>
                 </configuration>
                 <executions>
                     <execution>
@@ -122,6 +142,7 @@
                 </executions>
             </plugin>
 
+            <!-- Maven Surefire -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -142,6 +163,8 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+
+            <!-- Groovy Eclipse Compiler -->
             <plugin>
                 <groupId>${groovyGroupId}</groupId>
                 <artifactId>groovy-eclipse-compiler</artifactId>
@@ -156,6 +179,7 @@
                 </dependencies>
             </plugin>
 
+            <!-- Maven Compiler -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${mavenCompilerVersion}</version>
@@ -176,7 +200,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-        </plugins>
 
+        </plugins>
     </build>
 </project>
