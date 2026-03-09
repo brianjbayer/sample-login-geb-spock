@@ -9,7 +9,7 @@ jobs:
 
   image-names:
     name: PR (Branch) Image Names
-    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/image_names.yml@v0.2
     with:
       add_branch_name: true
 
@@ -19,10 +19,9 @@ jobs:
     name: Build Development Image
     needs:
       - image-names
-    uses: brianjbayer/actions-image-cicd/.github/workflows/buildx_push_image.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/buildx_amd_arm_image.yml@v0.2
     with:
       image: ${{ needs.image-names.outputs.dev_image }}
-      platforms: "linux/amd64,linux/arm64"
       buildopts: --target devenv
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
@@ -32,14 +31,12 @@ jobs:
     name: Build Deployment (Unvetted) Image
     needs:
       - image-names
-    uses: brianjbayer/actions-image-cicd/.github/workflows/buildx_push_image.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/buildx_amd_arm_image.yml@v0.2
     with:
       image: ${{ needs.image-names.outputs.unvetted_image }}
-      platforms: "linux/amd64,linux/arm64"
     secrets:
       registry_u: ${{ secrets.DOCKER_HUB_USERNAME }}
       registry_p: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
 
   # --- Vet Images ---
 
@@ -53,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: "Dependency Scan with dependency-check-maven"
-        run: "BROWSERTESTS_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -do mvn clean verify -DskipTests"
+        run: "NVD_API_KEY=${{ secrets.NVD_API_KEY }} BROWSERTESTS_IMAGE=${{ needs.image-names.outputs.dev_image }} ./script/dockercomposerun -do ./script/run -c secscan"
 
   # - End-to-End Tests -
   vet-e2e-tests-deployment:
@@ -78,7 +75,7 @@ jobs:
     uses: ./.github/workflows/run-e2e-tests.yml
     with:
       e2e_tests_image: ${{ needs.image-names.outputs.dev_image }}
-      e2e_tests_command: "./script/dockercomposerun -d mvn clean test"
+      e2e_tests_command: "./script/dockercomposerun -d ./script/run -c tests"
     secrets:
       login_username: ${{ secrets.LOGIN_USERNAME }}
       login_password: ${{ secrets.LOGIN_PASSWORD }}
@@ -91,7 +88,7 @@ jobs:
       - image-names
       - vet-dependency-security
       - vet-e2e-tests-deployment
-    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2.2
+    uses: brianjbayer/actions-image-cicd/.github/workflows/copy_image.yml@v0.2
     with:
       source_image: ${{ needs.image-names.outputs.unvetted_image }}
       target_image: ${{ needs.image-names.outputs.vetted_image }}

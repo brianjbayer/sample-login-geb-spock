@@ -9,3 +9,4 @@ services:
       - REMOTE_URL
       - HEADLESS
       - BASE_URL
+      - NVD_API_KEY

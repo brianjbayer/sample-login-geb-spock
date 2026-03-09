@@ -1,0 +1,71 @@
+#!/bin/bash
+# ----------------------------------------------------------------------
+# This script is intended for macOS and runs the project tests using
+# all browsers supported on Mac.  This script is for testing during
+# development on this project.
+# ----------------------------------------------------------------------
+
+prompt-to-proceed () {
+  read -p "Do you wish to proceed (Press any key to continue or 'n' to exit)? " response
+  if [[ $response == 'n' ]] || [[ $response == 'N' ]]; then
+    echo " buh-bye"
+    echo ""
+    exit
+  fi
+  echo ""
+}
+
+run_command () {
+  echo "  Executing [$@]..."
+  # quote to preserve spaces and args
+  "$@"
+  echo "  ... [$@] completed"
+  echo ""
+}
+
+load_if_dotenv_file () {
+  if [[ -f .env ]]; then
+    echo "Found .env file, loading it"
+    export $(cat .env | xargs)
+    echo ""
+  fi
+}
+
+### MAIN ###
+# Exit script on any errors
+set -e
+
+echo "Testing the NATIVE sample project - macOS only"
+echo ""
+
+load_if_dotenv_file
+
+run_tests_command="${RUN_TESTS_COMMAND-./script/run tests}"
+
+echo "Testing Chrome..."
+echo "Chrome Headed"
+BROWSER=chrome run_command $run_tests_command
+
+echo "Chrome Headless"
+HEADLESS=true BROWSER=chrome run_command $run_tests_command
+
+echo "Testing Edge..."
+echo "Edge Headed"
+BROWSER=edge run_command $run_tests_command
+
+echo "Edge Headless"
+HEADLESS=true BROWSER=edge run_command $run_tests_command
+
+echo "Testing Firefox..."
+echo "Firefox Headed"
+BROWSER=firefox run_command $run_tests_command
+
+echo "Firefox Headless"
+HEADLESS=true BROWSER=firefox run_command $run_tests_command
+
+echo "Testing Safari (Headed Sequential)"
+BROWSER=safari run_command $run_tests_command
+
+echo "--- ALL TESTS PASSED ---"
+echo ""
+echo "--- FIN ---"

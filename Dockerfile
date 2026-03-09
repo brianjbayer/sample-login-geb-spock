@@ -1,5 +1,5 @@
 #--- Base Image ---
-ARG BASE_IMAGE=maven:3.8-adoptopenjdk-16
+ARG BASE_IMAGE=maven:3.9-eclipse-temurin-21
 FROM ${BASE_IMAGE} AS maven-jdk
 
 #--- Dev Env Stage ---
@@ -23,7 +23,7 @@ USER ${DEPLOY_USER}
 
 WORKDIR /app
 # Copy pom and suppressed vulnerabilities
-COPY --chown=deployer pom.xml suppress-jackson-core-2182.xml /app/
+COPY --chown=deployer pom.xml suppress-*.xml /app/
 # Copy the source to /app
 COPY --chown=deployer src /app/src
 
